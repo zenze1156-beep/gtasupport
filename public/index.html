@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTA VI - Exclusive Beta</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            color: #d4af37;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 100vh;
+            box-sizing: border-box;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .top-right-register {
+            position: absolute;
+            top: 40px;
+            right: 5%;
+            z-index: 10;
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        @keyframes darkBlueBlink {
+            0%, 100% { 
+                color: #001f3f; 
+                text-shadow: 0 0 15px rgba(0, 31, 63, 0.9), 0 0 25px rgba(0, 119, 255, 0.6); 
+                opacity: 1;
+            }
+            50% { 
+                color: #0077ff; 
+                text-shadow: 0 0 10px rgba(0, 119, 255, 0.3); 
+                opacity: 0.7;
+            }
+        }
+
+        .register-link {
+            font-size: 32px; 
+            font-weight: bold;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            animation: darkBlueBlink 1.5s infinite ease-in-out;
+            padding: 0 10px;
+            border: 2px solid transparent;
+            transition: border 0.3s;
+            display: inline-block;
+            line-height: 1.2;
+        }
+
+        .register-link:hover {
+            border: 2px solid #0077ff;
+            border-radius: 5px;
+        }
+
+        .header {
+            font-size: 42px; 
+            line-height: 1.2;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+            animation: waveShake 3s infinite ease-in-out, textGlow 2s infinite alternate;
+            z-index: 2;
+            margin-bottom: 20px;
+        }
+
+        @keyframes waveShake {
+            0% { transform: translateX(0) translateY(0) rotate(0deg); }
+            25% { transform: translateX(3px) translateY(-2px) rotate(0.5deg); }
+            50% { transform: translateX(-3px) translateY(2px) rotate(-0.5deg); }
+            75% { transform: translateX(2px) translateY(-1px) rotate(0.3deg); }
+            100% { transform: translateX(0) translateY(0) rotate(0deg); }
+        }
+
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 5px rgba(212, 175, 55, 0.2); color: #b5952f; }
+            100% { text-shadow: 0 0 20px rgba(212, 175, 55, 0.9), 0 0 30px rgba(212, 175, 55, 0.5); color: #d4af37; }
+        }
+
+        @keyframes whiteTextBlink {
+            0%, 100% { opacity: 1; text-shadow: 0 0 8px rgba(255, 255, 255, 0.6); }
+            50% { opacity: 0.4; text-shadow: 0 0 2px rgba(255, 255, 255, 0.2); }
+        }
+
+        .main-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            width: 100%;
+            flex-grow: 1;
+            padding-bottom: 20px;
+        }
+
+        .left-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
+            z-index: 2;
+            max-width: 50%;
+        }
+
+        .gallery-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .image-box {
+            position: relative;
+            border: 3px solid #d4af37;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            border: none;
+        }
+
+        .img-left-1 { width: 170px; height: 250px; }
+        .img-left-2 { width: 250px; height: 160px; }
+        .img-left-3 { width: 170px; height: 250px; }
+
+        .description {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #ffffff;
+            animation: whiteTextBlink 2s infinite alternate;
+        }
+
+        .footer-text {
+            display: block;
+            font-size: 11px;
+            color: #ff9800; 
+            letter-spacing: 1px;
+            margin-top: 5px; 
+            text-transform: none;
+            text-align: left;
+        }
+
+        .right-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px; 
+            z-index: 1;
+            margin-left: 20px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .ring-wrapper {
+            position: relative;
+            width: 300px; 
+            height: 300px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ring-container {
+            position: absolute;
+            width: 100%; 
+            height: 100%; 
+            animation: rotateRing 10s linear infinite;
+            z-index: 1;
+        }
+
+        .ring-arc {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 4px solid transparent; 
+            border-radius: 50%;
+            border-top-color: #d4af37;
+            border-bottom-color: #d4af37;
+            animation: blinkBright 1.5s infinite alternate;
+        }
+
+        @keyframes rotateRing {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes blinkBright {
+            0% { opacity: 0.1; box-shadow: 0 0 5px rgba(212, 175, 55, 0.2); }
+            100% { opacity: 1; box-shadow: 0 0 25px rgba(212, 175, 55, 1), inset 0 0 15px rgba(212, 175, 55, 0.5); }
+        }
+
+        .center-images {
+            position: relative;
+            width: 260px; 
+            height: 160px; 
+            border: 3px solid #d4af37; 
+            border-radius: 8px;
+            overflow: hidden;
+            z-index: 2;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+        }
+
+        .center-images img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            top: 0;
+            left: 0;
+        }
+
+        .center-img-1 { animation: fade1 4s infinite; }
+        .center-img-2 { animation: fade2 4s infinite; opacity: 0; }
+
+        @keyframes fade1 {
+            0%, 45% { opacity: 1; }
+            55%, 100% { opacity: 0; }
+        }
+
+        @keyframes fade2 {
+            0%, 45% { opacity: 0; }
+            55%, 100% { opacity: 1; }
+        }
+
+        .cta-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .cta-row {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .claim-btn {
+            display: inline-block;
+            font-size: 18px;
+            color: #d4af37;
+            text-decoration: none;
+            padding: 12px 25px;
+            border: 2px solid #d4af37;
+            background-color: transparent;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: bold;
+            position: relative;
+            animation: glowPulse 2s infinite alternate;
+            white-space: nowrap;
+        }
+
+        @keyframes glowPulse {
+            0% { box-shadow: 0 0 5px rgba(212, 175, 55, 0.3); border-color: rgba(212, 175, 55, 0.6); }
+            100% { box-shadow: 0 0 25px rgba(212, 175, 55, 0.9), 0 0 50px rgba(212, 175, 55, 0.5); border-color: rgba(212, 175, 55, 1); }
+        }
+
+        .claim-btn:hover {
+            color: #1a1a1a;
+            background-color: #d4af37;
+            transition: all 0.3s ease;
+            animation: none;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 1); 
+        }
+
+        .features-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .feature-item {
+            font-size: 13px;
+            color: #ffffff;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: whiteTextBlink 2s infinite alternate;
+        }
+
+        .feature-item::before {
+            content: "◆";
+            color: #d4af37;
+            font-size: 10px;
+            text-shadow: 0 0 5px rgba(212, 175, 55, 0.8);
+        }
+
+        .bottom-links-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px; 
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .about-btn {
+            font-size: 16px;
+            color: #ffffff; 
+            text-decoration: underline;
+            cursor: pointer;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+            animation: whiteTextBlink 2s infinite alternate; 
+        }
+
+        .about-btn:hover {
+            color: #d4af37;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+        }
+
+        .terms-link {
+            font-size: 12px;
+            color: #888;
+            text-decoration: underline;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        .terms-link:hover {
+            color: #d4af37;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-box {
+            background-color: #1a1a1a;
+            border: 2px solid #d4af37;
+            border-radius: 10px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            color: #ffffff;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            position: relative;
+            animation: modalFadeIn 0.4s ease-out;
+            max-height: 80vh;
+            overflow-y: auto;
+            text-align: center;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-box h2 {
+            color: #d4af37;
+            margin-top: 0;
+            font-size: 32px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border-bottom: 1px solid #d4af37;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .modal-box p, .modal-box ul {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #e0e0e0;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .modal-box ul {
+            padding-left: 20px;
+        }
+
+        .modal-box li {
+            margin-bottom: 10px;
+        }
+
+        .modal-box strong {
+            color: #d4af37;
+        }
+
+        .modal-footer-text {
+            font-size: 11px;
+            color: #777;
+            letter-spacing: 1px;
+            margin-top: 30px;
+            text-transform: none;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #d4af37;
+            font-size: 28px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #ffffff;
+        }
+
+        .register-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .register-form input {
+            padding: 12px;
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            border-radius: 5px;
+            outline: none;
+            user-select: text; 
+            -webkit-user-select: text;
+        }
+
+        .register-form input:focus {
+            border-color: #d4af37;
+        }
+
+        .error-msg {
+            color: #ff4444;
+            font-size: 11px;
+            margin-top: -5px;
+            margin-bottom: 5px;
+            display: none; 
+            text-align: left;
+        }
+
+        .forgot-password {
+            font-size: 12px;
+            color: #888;
+            text-align: right;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+        
+        .forgot-password:hover {
+            color: #d4af37;
+        }
+
+        .register-form button {
+            padding: 12px;
+            background-color: #d4af37;
+            color: #1a1a1a;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .register-form button:hover {
+            background-color: #fff;
+        }
+
+        @media (max-width: 1200px) {
+            body { overflow: auto; }
+            .main-content {
+                flex-direction: column;
+                align-items: center;
+                gap: 40px;
+            }
+            .left-section {
+                max-width: 100%;
+                align-items: center;
+            }
+            .right-section {
+                margin-left: 0;
+                align-items: center;
+            }
+            .cta-row {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            .modal-box { padding: 30px 20px; }
+            .about-btn, .terms-link {
+                font-size: 14px;
+            }
+            .footer-text {
+                text-align: center; 
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 20px; }
+            .header { font-size: 28px; }
+            .description { font-size: 14px; text-align: center; }
+            .claim-btn { font-size: 16px; padding: 10px 20px; }
+            
+            .center-images { width: 220px; height: 135px; }
+            .img-left-1 { width: 130px; height: 190px; }
+            .img-left-2 { width: 200px; height: 120px; }
+            .img-left-3 { width: 130px; height: 190px; }
+            .feature-item { font-size: 12px; }
+            .gallery-left { flex-wrap: wrap; justify-content: center; }
+            
+            .top-right-register {
+                top: 20px;
+                right: 20px;
+            }
+            .register-link {
+                font-size: 22px;
+                letter-spacing: 2px;
+            }
+            .footer-text {
+                font-size: 10px;
+            }
+            .bottom-links-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-right-register">
+        <span class="register-link" id="topRegisterBtn" onclick="handleRegisterClick()">REGISTER</span>
+    </div>
+
+    <div class="header">
+        GTA VI:EXCLUSIVE BETA<br>
+        ACCESS NOW OPEN
+    </div>
+
+    <div class="main-content">
+        
+        <div class="left-section">
+            
+            <div class="gallery-left">
+                <div class="image-box img-left-1">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq18Lu7xEnZVkkSt0XQxlQ-WaXSr4aBiGoKEffFdNcek5V1k3OUtm3vLxy&s=10">
+                </div>
+                <div class="image-box img-left-2">
+                    <img src="https://www.rockstargames.com/VI/_next/static/media/Jason_Lucia_Rooftop_With_Logos_landscape.04l3xybfa4~6m.jpg?akim=1&imdensity=1&imwidth=3840">
+                </div>
+                <div class="image-box img-left-3">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnBJj0JwcQsDJG2hjytCNr1OIONUP-Rra9PhGxtvcgfw&s=10">
+                </div>
+            </div>
+
+            <div class="description">
+                Be among the first few thousand players worldwide to experience the next generation of open-world gaming. Limited slots available for the Global Stress Test.
+            </div>
+
+            <div class="footer-text">
+                2026 © All Rights Reserved. Rockstar Games
+            </div>
+
+        </div>
+
+        <div class="right-section">
+            
+            <div class="ring-wrapper">
+                <div class="ring-container">
+                    <div class="ring-arc"></div>
+                </div>
+                <div class="center-images">
+                    <img class="center-img-1" src="https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_Robbery_With_Logo_landscape.0sjdgaq91u2yn.jpg?akim=1&imdensity=1&imwidth=360">
+                    <img class="center-img-2" src="https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_Motel_landscape.08edvuwtm-20v.jpg?akim=1&imdensity=1&imwidth=3840">
+                </div>
+            </div>
+
+            <div class="cta-container">
+                <div class="cta-row">
+                    <a href="#" class="claim-btn" onclick="handleRegisterClick()">Join the Beta</a>
+                    <div class="features-list">
+                        <div class="feature-item">New Map Exploration</div>
+                        <div class="feature-item">Multiplayer Testing</div>
+                        <div class="feature-item">Exclusive Rewards</div>
+                    </div>
+                </div>
+                
+                <div class="bottom-links-container">
+                    <div class="about-btn" onclick="openAboutModal()">About GTA VI Beta Access Program</div>
+                    <div class="terms-link" onclick="openTermsModal()">Terms and Conditions apply</div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal-overlay" id="aboutModal">
+        <div class="modal-box">
+            <span class="close-btn" onclick="closeAboutModal()">&times;</span>
+            <h2>About GTA VI Beta Access Program</h2>
+            <p>
+                Welcome to the GTA VI Beta Access portal. Our mission is to build a community of passionate gamers who can provide valuable feedback to improve the gaming experience. This portal is designed to collect a pool of dedicated players who are interested in testing early versions of the game, reporting bugs, and suggesting features before the official global release. We aim to ensure that the final product meets the highest standards of quality and entertainment.
+            </p>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="termsModal">
+        <div class="modal-box">
+            <span class="close-btn" onclick="closeTermsModal()">&times;</span>
+            <h2>Terms and Conditions</h2>
+            <ul>
+                <li><strong>Eligibility:</strong> By registering on this site, you confirm that you meet the minimum age requirements to play GTA VI.</li>
+                <li><strong>Nature of Access:</strong> Access to the Beta is not guaranteed. Registration expresses your interest, and selection will be based on availability and criteria.</li>
+                <li><strong>Confidentiality:</strong> If selected for the Beta test, you agree to keep all gameplay footage, screenshots, and leaks confidential until officially permitted by the developers.</li>
+                <li><strong>Data Privacy:</strong> Any information provided (Email, Name, etc.) will be used solely for the purpose of the Beta selection process and will not be sold to third parties.</li>
+                <li><strong>Changes to Terms:</strong> We reserve the right to modify these terms at any time without prior notice.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="registerModal">
+        <div class="modal-box">
+            <span class="close-btn" onclick="closeRegisterModal()">&times;</span>
+            <h2>REGISTER</h2>
+            <p>Enter your details below to register for a chance to join the exclusive GTA VI Beta test.</p>
+            
+            <form class="register-form" onsubmit="submitForm(event)">
+                <input type="text" id="regName" placeholder="Enter your Name" required>
+                
+                <input type="email" id="regEmail" placeholder="Enter your Gmail ID" required oninput="validateEmail()">
+                <div class="error-msg" id="emailError">Only valid @gmail.com addresses are allowed. Temp mails are blocked.</div>
+                
+                <input type="password" id="regPassword" placeholder="Create a Password" required oninput="validatePassword()">
+                <div class="error-msg" id="passwordError">Password must be 8+ chars with 1 Capital, 1 Number & 1 Symbol.</div>
+                
+                <div class="forgot-password" onclick="alert('Password reset link will be sent to your email.')">Forgot Password?</div>
+
+                <button type="submit">Submit Application</button>
+            </form>
+            <div class="modal-footer-text">2026 © All Rights Reserved. Rockstar Games</div>
+        </div>
+    </div>
+
+    <script>
+        // பக்கத்தை லோட் செய்யும் போது, ஏற்கனவே ரிஜிஸ்டர் செய்துள்ளாரா என்று செக் செய்யும்
+        window.onload = function() {
+            if (localStorage.getItem("isRegistered") === "true") {
+                document.getElementById("topRegisterBtn").innerText = "LOGIN";
+            }
+        };
+
+        // ரிஜிஸ்டர் பட்டனை கிளிக் செய்யும் போது
+        function handleRegisterClick() {
+            if (localStorage.getItem("isRegistered") === "true") {
+                alert("You have already registered! Please proceed to login.");
+                window.location.href = "login.html"; // லாகின் பேஜ்க்கு போ
+            } else {
+                openRegisterModal();
+            }
+        }
+
+        function openAboutModal() {
+            document.getElementById('aboutModal').style.display = 'flex';
+        }
+
+        function closeAboutModal() {
+            document.getElementById('aboutModal').style.display = 'none';
+        }
+
+        function openTermsModal() {
+            document.getElementById('termsModal').style.display = 'flex';
+        }
+
+        function closeTermsModal() {
+            document.getElementById('termsModal').style.display = 'none';
+        }
+
+        function openRegisterModal() {
+            document.getElementById('registerModal').style.display = 'flex';
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').style.display = 'none';
+        }
+
+        function validateEmail() {
+            var email = document.getElementById('regEmail').value;
+            var emailError = document.getElementById('emailError');
+            var gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+            
+            if (email.length > 0 && !gmailRegex.test(email)) {
+                emailError.style.display = 'block';
+                return false;
+            } else {
+                emailError.style.display = 'none';
+                return true;
+            }
+        }
+
+       function validatePassword() {
+    var password = document.getElementById('regPassword').value;
+    var passwordError = document.getElementById('passwordError');
+    
+    // பாஸ்வேர்ட் 6 எழுத்துக்கு மேல் இருந்தா போதும்
+    if (password.length > 0 && password.length < 6) {
+        passwordError.style.display = 'block';
+        passwordError.innerText = "Password must be at least 6 characters.";
+        return false;
+    } else {
+        passwordError.style.display = 'none';
+        return true;
+    }
+}
+
+        function submitForm(event) {
+            event.preventDefault(); 
+            
+            var isEmailValid = validateEmail();
+            var isPasswordValid = validatePassword();
+            
+            if (isEmailValid && isPasswordValid) {
+                // ரிஜிஸ்டர் முடிந்தது என பிரவுசரில் சேமிக்கிறது
+                localStorage.setItem("isRegistered", "true"); 
+                // நேரடியாக லாகின் பேஜ்க்கு அழைத்துச் செல்லும்
+                window.location.href = "login.html"; 
+            } else {
+                alert("Please fix the errors in the form before submitting.");
+            }
+        }
+
+        window.onclick = function(event) {
+            var aboutModal = document.getElementById('aboutModal');
+            var termsModal = document.getElementById('termsModal');
+            var registerModal = document.getElementById('registerModal');
+            
+            if (event.target == aboutModal) {
+                aboutModal.style.display = 'none';
+            }
+            if (event.target == termsModal) {
+                termsModal.style.display = 'none';
+            }
+            if (event.target == registerModal) {
+                registerModal.style.display = 'none';
+            }
+        }
+    </script>
+
+</body>
+</html>

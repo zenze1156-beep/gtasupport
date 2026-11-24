@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Successful</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #000;
+            color: #d4af37;
+            font-family: 'Courier New', Courier, monospace;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* பின்னணியில் படங்கள் நிரம்பிய கேலரி (Grid) */
+        .image-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 2px;
+            opacity: 0.4; /* படங்கள் சற்று மங்கலாக தெரியும் */
+            z-index: 1;
+        }
+
+        .image-grid img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* நடுவில் உள்ள மெசேஜ் பாக்ஸ் */
+        .message-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(26, 26, 26, 0.95);
+            border: 3px solid #d4af37;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.8);
+            z-index: 2;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        h1 {
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.9);
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            color: #ffffff;
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .login-btn {
+            display: inline-block;
+            color: #1a1a1a;
+            background-color: #d4af37;
+            text-decoration: none;
+            padding: 12px 30px;
+            font-weight: bold;
+            font-size: 18px;
+            text-transform: uppercase;
+            border-radius: 5px;
+            transition: 0.3s;
+            border: 2px solid #d4af37;
+        }
+
+        .login-btn:hover {
+            background-color: transparent;
+            color: #d4af37;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 12 GTA 6 Images Grid (No Gaps) -->
+    <div class="image-grid">
+        <img src="https://www.rockstargames.com/VI/_next/static/media/Jason_Lucia_Rooftop_With_Logos_landscape.04l3xybfa4~6m.jpg?akim=1&imdensity=1&imwidth=3840">
+        <img src="https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_Robbery_With_Logo_landscape.0sjdgaq91u2yn.jpg?akim=1&imdensity=1&imwidth=360">
+        <img src="https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_Motel_landscape.08edvuwtm-20v.jpg?akim=1&imdensity=1&imwidth=3840">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq18Lu7xEnZVkkSt0XQxlQ-WaXSr4aBiGoKEffFdNcek5V1k3OUtm3vLxy&s=10">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnBJj0JwcQsDJG2hjytCNr1OIONUP-Rra9PhGxtvcgfw&s=10">
+        <img src="https://www.rockstargames.com/VI/_next/static/media/Jason_Lucia_Rooftop_With_Logos_landscape.04l3xybfa4~6m.jpg?akim=1&imdensity=1&imwidth=3840">
+        <img src="https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_Motel_landscape.08edvuwtm-20v.jpg?akim=1&imdensity=1&imwidth=3840">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq18Lu7xEnZVkkSt0XQxlQ-WaXSr4aBiGoKEffFdNcek5V1k3OUtm3vLxy&s=10">
+        <img src="https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_Robbery_With_Logo_landscape.0sjdgaq91u2yn.jpg?akim=1&imdensity=1&imwidth=360">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnBJj0JwcQsDJG2hjytCNr1OIONUP-Rra9PhGxtvcgfw&s=10">
+        <img src="https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_Robbery_With_Logo_landscape.0sjdgaq91u2yn.jpg?akim=1&imdensity=1&imwidth=360">
+        <img src="https://www.rockstargames.com/VI/_next/static/media/Jason_Lucia_Rooftop_With_Logos_landscape.04l3xybfa4~6m.jpg?akim=1&imdensity=1&imwidth=3840">
+    </div>
+
+    <!-- வெற்றி மெசேஜ் மற்றும் லாகின் பட்டன் -->
+    <div class="message-box">
+        <h1>REGISTRATION SUCCESSFUL!</h1>
+        <p>Your application for the GTA VI Beta has been received.<br>You can now proceed to login.</p>
+        <a href="login.html" class="login-btn">Proceed to Login</a>
+    </div>
+
+</body>
+</html>

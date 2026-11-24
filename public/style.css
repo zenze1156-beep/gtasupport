@@ -1,0 +1,383 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000000;
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.hero {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 10%;
+    position: relative;
+    background: radial-gradient(circle at 25% 50%, rgba(255, 215, 0, 0.08) 0%, rgba(0,0,0,1) 70%);
+}
+
+.bg-lines {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-image: 
+        linear-gradient(rgba(255, 215, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 215, 0, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.left-content {
+    z-index: 2;
+    width: 50%;
+    text-align: left;
+    animation: textFloat 5s ease-in-out infinite;
+}
+
+.main-headline {
+    font-size: 3.8rem;
+    font-weight: 800;
+    color: #FFD700;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 193, 7, 0.5);
+    margin-bottom: 20px;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.sub-headline {
+    font-size: 1.2rem;
+    color: #ffffff;
+    line-height: 1.8;
+    font-weight: 300;
+    margin-bottom: 40px;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.sub-headline .highlight {
+    color: #FFD700;
+    font-weight: 600;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+}
+
+.button-group {
+    display: flex;
+    gap: 20px;
+}
+
+.cta-btn {
+    padding: 15px 35px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.cta-btn.primary {
+    background-color: #FFD700;
+    color: #000000;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+.cta-btn.primary:hover {
+    background-color: #ffffff;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.9), 0 0 60px rgba(255, 215, 0, 0.5);
+    transform: translateY(-3px);
+}
+
+.cta-btn.secondary {
+    background-color: transparent;
+    color: #FFD700;
+    border: 2px solid #FFD700;
+}
+
+.cta-btn.secondary:hover {
+    background-color: rgba(255, 215, 0, 0.1);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+    transform: translateY(-3px);
+}
+
+.hero-graphic {
+    position: relative;
+    width: 600px;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+.ring {
+    position: absolute;
+    width: 450px;
+    height: 450px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #FFD700;
+    border-bottom-color: #FFD700;
+    animation: spin 8s linear infinite;
+    box-shadow: 0 0 60px rgba(255, 215, 0, 0.3), inset 0 0 40px rgba(255, 215, 0, 0.1);
+    z-index: 1;
+}
+
+.glow-circle {
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.25) 0%, rgba(255, 215, 0, 0) 70%);
+    animation: pulse 3s ease-in-out infinite;
+    z-index: 1;
+}
+
+.image-container {
+    width: 480px;
+    height: 300px;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    z-index: 5;
+    border: 3px solid #FFD700;
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+    animation: float 4s ease-in-out infinite;
+    background: #111;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.img-slide-1 {
+    animation: fade1 8s infinite;
+}
+
+.img-slide-2 {
+    animation: fade2 8s infinite;
+}
+
+/* Wallet Modal Styles */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.wallet-modal {
+    background: #111111;
+    border: 1px solid #333;
+    border-radius: 20px;
+    padding: 40px;
+    width: 400px;
+    max-width: 90%;
+    text-align: center;
+    box-shadow: 0 0 50px rgba(255, 215, 0, 0.1);
+    position: relative;
+    transform: translateY(-20px);
+    animation: modalSlideUp 0.4s ease forwards;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-btn:hover { 
+    color: #FFD700; 
+}
+
+.wallet-modal h2 {
+    color: #FFD700;
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+.wallet-modal p {
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+}
+
+.wallet-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.wallet-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.wallet-option:hover {
+    border-color: #FFD700;
+    background: rgba(255, 215, 0, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.1);
+}
+
+.wallet-icon-wrapper {
+    width: 40px;
+    height: 40px;
+    background: #000;
+    border: 1px solid #FFD700;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.wallet-icon-wrapper svg {
+    width: 28px;
+    height: 28px;
+}
+
+.wallet-name {
+    color: #fff;
+    font-weight: 600;
+    flex-grow: 1;
+    text-align: left;
+}
+
+.wallet-status {
+    color: #FFD700;
+    font-size: 0.8rem;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.wallet-option:hover .wallet-status { 
+    opacity: 1; 
+}
+
+/* Toast Message Styles */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #FFD700;
+    color: #000;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
+    opacity: 0;
+    transition: all 0.4s ease;
+    z-index: 1000;
+    text-align: center;
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.toast.error {
+    background: #ff4444;
+    color: #fff;
+    box-shadow: 0 5px 20px rgba(255, 68, 68, 0.4);
+}
+
+/* Animations */
+@keyframes spin { 
+    0% { transform: rotate(0deg); } 
+    100% { transform: rotate(360deg); } 
+}
+
+@keyframes float { 
+    0% { transform: translateY(0px) scale(1); } 
+    50% { transform: translateY(-20px) scale(1.05); } 
+    100% { transform: translateY(0px) scale(1); } 
+}
+
+@keyframes pulse { 
+    0% { transform: scale(1); opacity: 0.6; } 
+    50% { transform: scale(1.15); opacity: 1; } 
+    100% { transform: scale(1); opacity: 0.6; } 
+}
+
+@keyframes textFloat { 
+    0% { transform: translateY(0px); } 
+    50% { transform: translateY(-10px); } 
+    100% { transform: translateY(0px); } 
+}
+
+@keyframes modalSlideUp { 
+    0% { transform: translateY(20px); opacity: 0; } 
+    100% { transform: translateY(0); opacity: 1; } 
+}
+
+@keyframes fade1 {
+    0%, 40% { opacity: 1; }
+    50%, 90% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes fade2 {
+    0%, 40% { opacity: 0; }
+    50%, 90% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+    .hero { flex-direction: column; justify-content: center; padding: 10% 5%; text-align: center; }
+    .left-content { width: 100%; text-align: center; margin-bottom: 50px; }
+    .main-headline { font-size: 2.5rem; }
+    .button-group { justify-content: center; }
+    .hero-graphic { width: 350px; height: 350px; }
+    .image-container { width: 100%; max-width: 350px; height: 220px; }
+    .ring { width: 300px; height: 300px; }
+    .glow-circle { width: 250px; height: 250px; }
+}
